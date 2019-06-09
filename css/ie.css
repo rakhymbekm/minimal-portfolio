@@ -1,0 +1,77 @@
+@media (max-width: 1275px) {
+  .left-col>.right-col {
+    height: auto;
+  }
+
+  .portfolio>.right-col {
+    float: none;
+  }
+
+  .portfolio>.left-col {    
+    float: none;
+  }
+
+  .left-col>.left-col {
+    float: none;
+  }
+}
+
+@media (max-width: 1130px) {
+  .my-vision .on-the-right article {
+    margin: 0;
+  }
+
+  .my-vision article { 
+    margin: 0;
+  }
+
+  /*
+  -------portfolio------
+  */
+
+  .portfolio {
+    height: auto;
+  }
+
+  .portfolio>.right-col>div:nth-of-type(odd)>div {
+    margin-right: 4.5%;
+    float: none;
+  }
+
+  .portfolio>.left-col {
+    height: auto;
+  }
+
+  .left-col>.right-col {
+    float: none;
+  }
+
+  .left-col>.left-col {
+    height: auto;
+    margin: 0;
+  }
+
+  .portfolio>.right-col>div:nth-of-type(even)>div {
+    margin: 0;
+  }
+}
+
+@media (max-width: 950px) {
+  .my-vision img.on-the-left, .my-vision figure:nth-of-type(even) img.on-the-right {
+    float: none;
+  }
+
+  .my-vision figcaption.on-the-right {
+    float: none;
+  }
+
+  .my-vision figure:first-of-type {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 840px) {
+  .copyright, .socials {
+    float: none;
+  }
+}
