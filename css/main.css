@@ -455,6 +455,44 @@ body {
   margin-bottom: 16%;
 }
 
+.contact .msg {
+  display: none;
+  width: 94%;
+  padding: 1.3em 5%;
+  text-align: center;
+  line-height: 1;
+  font-size: 1em;
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+.contact div.err {  
+  color: #dc7171;
+  border: 1.2px #dc7171 solid;
+}
+
+.contact input.err {
+  border-bottom-color: #dc7171;
+}
+.contact input.err {
+  border-bottom-color: #dc7171;
+  color:  #dc7171;
+}
+
+.contact textarea.err {
+  border-color: #dc7171;
+  color:  #dc7171;
+}
+
+.contact input.err::placeholder, .contact textarea.err::placeholder {
+  color: #dc7171;
+}
+
+.contact .success {  
+  color: #80e5d3;
+  border: #80e5d3 solid;
+}
+
 .contact input {
   outline: none;
   width: 100%;

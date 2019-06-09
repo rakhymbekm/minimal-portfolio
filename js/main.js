@@ -59,12 +59,6 @@
           }
           else {            
             var targetEl = jQuery(classOfTargetSection);
-
-            // надо закончить вычисление промежутка между секциями
-            // вычисления padding-top: (targetEl.innerHeight() - targetEl.height()) / 2 )
-            // теперь надо вычислить padding предыдущего элемента, в случае, если padding текущего элемента равен нулю
-            // также нужно вычислить margin-top текущего элемента, 
-            // и margin-top предыдущего элемента, в случае если margin-top текущего равен нулю
             
             if (classOfTargetSection === '.my-vision') {
               scrollToTargetSection(targetEl.offset().top);
@@ -95,49 +89,136 @@
       
     };
 
-    var escapeHtml = function (unsafe) {
-      return unsafe
-           .replace(/&/g, "&amp;")
-           .replace(/</g, "&lt;")
-           .replace(/>/g, "&gt;")
-           .replace(/"/g, "&quot;")
-           .replace(/'/g, "&#039;");
-   }
+    var formValidate = function (name, email, msg) {
 
-    var formValidate = function (typedName, typedEmail, typedMsg) {
+      var validateEmail = function (typedEmail) {        
+  
+        if (typedEmail.length < 5 || typedEmail.length > 62) { // sample: s@s.s
+           return 'email has an invalid length';
+        }
+  
+        if ( typedEmail.indexOf('@') === (-1) ) {
+          return 'there is no an "at" symbol';
+        }
+        
+        if ( (typedEmail.match(/@/g) || []).length >= 2 ) {
+          return 'only one "at" symbol allowed';
+        }
+  
+        if ( typedEmail.indexOf('.') === (-1) ) {
+          return 'there should be at least one dot in an email';
+        }
+  
+        if ( !( typedEmail.lastIndexOf('.') > typedEmail.indexOf('@') ) ) {
+          return 'second level domain name is required';
+        }
+
+        if ( typedEmail.lastIndexOf('.') == typedEmail.length - 1 ) {
+          return 'dot shouldn\'t be last in the line';
+        }
+
+        return '';
+      };
+
+      var typedName = name.value,
+      typedEmail = email.value,
+      typedMsg = msg.value;
       
-      if ((typedName.length < 2 || typedName.length > 50) &&
-          (typedEmail.length < 5 || typedEmail.length > 62) && // sample: s@s.s
-          (typedEmail.indexOf('@') === (-1) || (typedEmail.match(/@/g) || []).length >= 2) && // only one occurence of '@' is allowed
-          typedEmail.indexOf('.') === (-1) &&
-          typedMsg.length == 0) {
-            // there is an error
-            return false;
-      }
-      else if (typedEmail.lastIndexOf('.') < typedEmail.indexOf('@')) { // second level domain name is required
-        // there is an error
-        return false;
+      var errors = {
+        name: { msg: [], el: name },
+        email: { msg: [], el: email },
+        message: { msg: [], el: msg }
+      };
+
+      if (typedName.length < 2 || typedName.length > 50) {
+        errors.name.msg.push('name is invalid');
       }
 
-      return true;
+      var emailErrorMsg = validateEmail(typedEmail);
+
+      if (emailErrorMsg.length != 0) {
+        errors.email.msg.push(emailErrorMsg);
+      }
+
+      if (typedMsg.length == 0) {
+        errors.message.msg.push('message shouldn\'t be empty');
+      }
+      if ( errors.name.msg.length != 0 ||
+           errors.email.msg.length != 0 ||
+           errors.message.msg.length != 0 ) {
+        return errors;
+      }
+
+      return false;
     };
 
+    var showErrorMsg = function (err) { // err = { type: 'validation / ajax', data: errors / errMsg }
+      
+      var contentHTML = '';
+
+      var addErrMsg = function (msg) {
+        if (contentHTML.length != 0) {
+          msg = '<br>' + msg;
+        }
+        contentHTML += msg; // it's closure, so contentHTML is available here
+      };
+
+      var updateMsgBox = function (contentHTML) {
+        var msgBox = document.querySelector('.contact .msg');
+        // if (msgBox.innerHTML.length != 0) {
+        //   contentHTML = '<br>' + contentHTML;
+        // }
+        msgBox.innerHTML = contentHTML;
+        msgBox.style.display = 'block';
+      };
+      
+      var generateMsg = function (arrayOfMsgs) {
+        var concatenated = '';
+
+        arrayOfMsgs.forEach(function (singleMsg) {
+          concatenated += singleMsg + '<br>';
+        });
+
+        return concatenated;
+      };
+      
+      switch (err.type) {
+        case 'validation':
+          if (err.data.name.msg.length != 0) {            
+            err.data.name.el.classList.add('err');            
+            addErrMsg( generateMsg(err.data.name.msg) );
+          }
+          else if (err.data.name.el.classList.contains('err')) {
+            err.data.name.el.classList.remove('err');
+          }
+          if (err.data.email.msg.length != 0) {       
+            err.data.email.el.classList.add('err');            
+            addErrMsg( generateMsg(err.data.email.msg) );
+          }
+          else if (err.data.email.el.classList.contains('err')) {
+            err.data.email.el.classList.remove('err');
+          }
+          if (err.data.message.msg.length != 0) {       
+            err.data.message.el.classList.add('err');            
+            addErrMsg( generateMsg(err.data.message.msg) );
+          }
+          else if (err.data.message.el.classList.contains('err')) {
+            err.data.message.el.classList.remove('err');
+          }
+          break;
+        case 'ajax':
+
+          break;
+      }
+
+      if (contentHTML.length != 0) {
+        updateMsgBox(contentHTML);
+      }
+    }
     var submitForm = function () {
       var contactForm = document.querySelector('.contact form');
       
       var url = contactForm.getAttribute('action');
-      
-      // var nameInput = contactForm.querySelector('input[type="text"]');
-      // var nameLabel = nameInput.getAttribute('name');
-      // var nameValue = nameInput.value;
-      
-      // var emailInput = contactForm.querySelector('input[type="email"]');
-      // var emailLabel = emailInput.getAttribute('name');
-      // var emailValue = emailInput.value;
-
-      // var messageInput = contactForm.querySelector('textarea');
-      // var messageLabel = messageInput.getAttribute('name');
-      // var messageValue = messageInput.value;
       
       var data = $('.contact form').serialize();
      
@@ -149,9 +230,11 @@
         dataType: 'json',
         success: function () {
           // show successful message
+          console.log('successful');
         },
         error: function () {
           // show error message
+          console.log('failed');
         }
       });
 
@@ -167,19 +250,25 @@
 
       sendingForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        var typedName = name.value,
-            typedEmail = email.value,
-            typedMsg = msg.value;
 
-        if (formValidate(typedName, typedEmail, typedMsg)) {
-          escapeHtml(typedMsg);
-          // send the form
-          console.log('good');
+        var errors = formValidate(name, email, msg);
+
+        if (errors) {
+          showErrorMsg({
+            type: 'validation',
+            data: errors
+          });
         }
-        else {
-          // show an error msg
-          console.log('error');
-        }
+        
+        // if () {
+          
+        //   // send the form
+        //   console.log('good');
+        // }
+        // else {
+        //   // show an error msg
+        //   console.log('error');
+        // }
       }, false);
     };
     
