@@ -219,9 +219,8 @@
       }
     }
     var submitForm = function () {
-      var contactForm = document.querySelector('.contact form');
-      
-      var url = contactForm.getAttribute('action');
+      // it's a closure, so this variable is available here
+      var url = sendingForm.getAttribute('action');
       
       var data = $('.contact form').serialize();
      
@@ -233,7 +232,10 @@
         dataType: 'json',
         success: function () {
           // clean all data from all form elements
-          
+          // the cause of the accessiblity of variables is a closure
+          name.value = '';
+          email.value = '';
+          msg.value = '';
           // show successful message
           showSuccessfulMsg('Your message is successfully sent!');
         },
@@ -283,6 +285,7 @@
           }
            // send the form
           console.log('good');
+          submitForm();
         }
 
       }, false);
