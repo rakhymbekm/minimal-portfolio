@@ -824,7 +824,7 @@ body {
     position: absolute;
     top: 60px;
     left: 0;
-    height: 45%;
+    height: auto;
     z-index: 100;
     background-color: white;
     width: 100%;
