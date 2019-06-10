@@ -488,7 +488,7 @@ body {
   color: #dc7171;
 }
 
-.contact .success {  
+.contact div.successful {
   color: #80e5d3;
   border: #80e5d3 solid;
 }

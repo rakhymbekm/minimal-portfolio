@@ -152,6 +152,18 @@
       return false;
     };
 
+    var updateMsgBox = function (contentHTML, successful = true) {
+      var msgBox = document.querySelector('.contact .msg');
+      if (successful) msgBox.classList.add('successful');
+      else msgBox.classList.add('err');
+      msgBox.innerHTML = contentHTML;
+      msgBox.style.display = 'block';
+    };
+
+    var showSuccessfulMsg = function (msg) {
+      updateMsgBox(msg);
+    }
+
     var showErrorMsg = function (err) { // err = { type: 'validation / ajax', data: errors / errMsg }
       
       var contentHTML = '';
@@ -163,15 +175,6 @@
         contentHTML += msg; // it's closure, so contentHTML is available here
       };
 
-      var updateMsgBox = function (contentHTML) {
-        var msgBox = document.querySelector('.contact .msg');
-        // if (msgBox.innerHTML.length != 0) {
-        //   contentHTML = '<br>' + contentHTML;
-        // }
-        msgBox.innerHTML = contentHTML;
-        msgBox.style.display = 'block';
-      };
-      
       var generateMsg = function (arrayOfMsgs) {
         var concatenated = '';
 
@@ -207,12 +210,12 @@
           }
           break;
         case 'ajax':
-
+          addErrMsg(err.data);
           break;
       }
 
       if (contentHTML.length != 0) {
-        updateMsgBox(contentHTML);
+        updateMsgBox(contentHTML, false); // it's a closure, so updateMsgBox is available here
       }
     }
     var submitForm = function () {
@@ -229,12 +232,17 @@
         data: data,
         dataType: 'json',
         success: function () {
+          // clean all data from all form elements
+          
           // show successful message
-          console.log('successful');
+          showSuccessfulMsg('Your message is successfully sent!');
         },
         error: function () {
           // show error message
-          console.log('failed');
+          showErrorMsg({
+            type: 'ajax',
+            data: 'Something went wrong... Please, try again later.'
+          })
         }
       });
 
@@ -244,6 +252,7 @@
     var formHandle = function () {
 
       var sendingForm = document.querySelector('.contact form'),
+          msgBox = document.querySelector('.contact .msg'),
           name = document.querySelector('.contact input[type="text"]'),
           email = document.querySelector('.contact input[type="email"]'),
           msg = document.querySelector('.contact textarea');
@@ -259,16 +268,23 @@
             data: errors
           });
         }
-        
-        // if () {
-          
-        //   // send the form
-        //   console.log('good');
-        // }
-        // else {
-        //   // show an error msg
-        //   console.log('error');
-        // }
+        else {
+          if (name.classList.contains('err')) {
+            name.classList.remove('err');
+          }
+          if (email.classList.contains('err')) {
+            email.classList.remove('err');
+          }
+          if (msg.classList.contains('err')) {
+            msg.classList.remove('err');
+          }
+          if (window.getComputedStyle(msgBox).display === 'block') {
+            msgBox.style.display = 'none';
+          }
+           // send the form
+          console.log('good');
+        }
+
       }, false);
     };
     
