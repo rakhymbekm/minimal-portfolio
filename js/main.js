@@ -218,7 +218,7 @@
         updateMsgBox(contentHTML, false); // it's a closure, so updateMsgBox is available here
       }
     }
-    var submitForm = function () {
+    var submitForm = function (sendingForm) {
       // it's a closure, so this variable is available here
       var url = sendingForm.getAttribute('action');
       
@@ -284,8 +284,8 @@
             msgBox.style.display = 'none';
           }
            // send the form
+          submitForm(this);
           console.log('good');
-          submitForm();
         }
 
       }, false);
