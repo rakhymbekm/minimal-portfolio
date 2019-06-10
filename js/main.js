@@ -229,8 +229,6 @@
         type: 'POST',
         cashe: false,
         data: data,
-        crossDomain: true,
-        contentType: 'application/json',
         dataType: 'json',
         success: function (data, status) {
           console.log('data:' + data + '\nstatus: ' + status);
