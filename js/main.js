@@ -229,8 +229,11 @@
         type: 'POST',
         cashe: false,
         data: data,
+        crossDomain: true,
+        contentType: 'application/json',
         dataType: 'json',
-        success: function () {
+        success: function (data, status) {
+          console.log('data:' + data + '\nstatus: ' + status);
           // clean all data from all form elements
           // the cause of the accessiblity of variables is a closure
           name.value = '';
@@ -239,7 +242,7 @@
           // show successful message
           showSuccessfulMsg('Your message is successfully sent!');
         },
-        error: function () {
+        error: function (data1, data2) {
           // show error message
           showErrorMsg({
             type: 'ajax',
@@ -285,7 +288,6 @@
           }
            // send the form
           submitForm(this);
-          console.log('good');
         }
 
       }, false);
