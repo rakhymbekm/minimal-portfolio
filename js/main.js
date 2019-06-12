@@ -224,30 +224,29 @@
       
       var data = $('.contact form').serialize();
      
-      $.ajax({
-        url: url,
-        type: 'POST',
-        cashe: false,
-        data: data,
-        dataType: 'json',
-        success: function (data, status) {
-          console.log('data:' + data + '\nstatus: ' + status);
-          // clean all data from all form elements
-          // the cause of the accessiblity of variables is a closure
-          name.value = '';
-          email.value = '';
-          msg.value = '';
-          // show successful message
-          showSuccessfulMsg('Your message is successfully sent!');
-        },
-        error: function (data1, data2) {
-          // show error message
-          showErrorMsg({
-            type: 'ajax',
-            data: 'Something went wrong... Please, try again later.'
-          })
-        }
-      });
+      // $.ajax({
+      //   url: url,
+      //   type: 'POST',
+      //   cashe: false,
+      //   data: data,
+      //   success: function (data, status) {
+      //     console.log('data:' + data + '\nstatus: ' + status);
+      //     // clean all data from all form elements
+      //     // the cause of the accessiblity of variables is a closure
+      //     name.value = '';
+      //     email.value = '';
+      //     msg.value = '';
+      //     // show successful message
+      //     showSuccessfulMsg('Your message is successfully sent!');
+      //   },
+      //   error: function (data1, data2) {
+      //     // show error message
+      //     showErrorMsg({
+      //       type: 'ajax',
+      //       data: 'Something went wrong... Please, try again later.'
+      //     })
+      //   }
+      // });
 
       return false; // to prevent unplanned submits
     };
@@ -285,7 +284,8 @@
             msgBox.style.display = 'none';
           }
            // send the form
-          submitForm(this);
+          // submitForm(this);
+          this.submit();
         }
 
       }, false);
